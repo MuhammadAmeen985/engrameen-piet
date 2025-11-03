@@ -1,0 +1,179 @@
+import React, { useState } from 'react';
+import { ChevronDown, ChevronRight, Brain, Database, Layers, Zap } from 'lucide-react';
+
+const ConceptMap = () => {
+  const [expanded, setExpanded] = useState({});
+
+  const toggleNode = (id) => {
+    setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const concepts = [
+    {
+      id: 'genai',
+      title: 'Generative AI & LLMs',
+      icon: Brain,
+      color: 'bg-purple-500',
+      children: [
+        { title: 'Large Language Models (LLMs)', desc: 'Transformer-based models trained on massive text data' },
+        { title: 'Text Generation', desc: 'Creating human-like text, code, and content' },
+        { title: 'Prompt Engineering', desc: 'Crafting inputs to guide model outputs' },
+        { title: 'Fine-tuning & RAG', desc: 'Customizing models for specific use cases' }
+      ]
+    },
+    {
+      id: 'ml-dl',
+      title: 'ML & Deep Learning Architectures',
+      icon: Layers,
+      color: 'bg-blue-500',
+      children: [
+        { 
+          title: 'Supervised Learning', 
+          desc: 'Classification & regression with labeled data',
+          sub: ['Decision Trees', 'Random Forests', 'Neural Networks']
+        },
+        { 
+          title: 'Unsupervised Learning', 
+          desc: 'Clustering & dimensionality reduction',
+          sub: ['K-Means', 'PCA', 'Autoencoders']
+        },
+        { 
+          title: 'CNNs', 
+          desc: 'Convolutional Neural Networks for image processing',
+          sub: ['Feature extraction', 'Image classification', 'Object detection']
+        },
+        { 
+          title: 'RNNs & LSTMs', 
+          desc: 'Sequential data processing for time series & text',
+          sub: ['Memory cells', 'Sequence prediction', 'NLP tasks']
+        }
+      ]
+    },
+    {
+      id: 'oracle-stack',
+      title: 'Oracle AI Stack',
+      icon: Database,
+      color: 'bg-orange-500',
+      children: [
+        { 
+          title: 'Infrastructure Layer', 
+          desc: 'OCI compute, GPU instances, networking',
+          sub: ['GPU/CPU clusters', 'High-performance storage', 'Scalable architecture']
+        },
+        { 
+          title: 'Data Layer', 
+          desc: 'Oracle 23ai with vector search & AI capabilities',
+          sub: ['Vector database', 'SQL + AI integration', 'Semantic search']
+        },
+        { 
+          title: 'ML Services', 
+          desc: 'Model training, deployment, and management',
+          sub: ['AutoML', 'Model catalog', 'MLOps pipelines']
+        },
+        { 
+          title: 'AI Services Layer', 
+          desc: 'Pre-built AI capabilities and APIs',
+          sub: ['Vision', 'Language', 'Speech', 'Document AI']
+        }
+      ]
+    },
+    {
+      id: 'oci-services',
+      title: 'OCI AI Services Portfolio',
+      icon: Zap,
+      color: 'bg-green-500',
+      children: [
+        { 
+          title: 'OCI Generative AI', 
+          desc: 'Managed LLM service with custom models',
+          sub: ['Cohere models', 'Llama models', 'Custom fine-tuning']
+        },
+        { 
+          title: 'OCI AI Services', 
+          desc: 'Pre-trained AI for common tasks',
+          sub: ['Vision', 'Language', 'Speech', 'Anomaly Detection']
+        },
+        { 
+          title: 'OCI Data Science', 
+          desc: 'End-to-end ML platform',
+          sub: ['Notebooks', 'Model training', 'Deployment']
+        },
+        { 
+          title: 'Oracle Select AI', 
+          desc: 'Natural language to SQL queries',
+          sub: ['Conversational data access', 'LLM integration', 'Database insights']
+        }
+      ]
+    }
+  ];
+
+  const ConceptNode = ({ concept }) => {
+    const isExpanded = expanded[concept.id];
+    const Icon = concept.icon;
+
+    return (
+      <div className="mb-6">
+        <button
+          onClick={() => toggleNode(concept.id)}
+          className={`w-full ${concept.color} text-white p-4 rounded-lg shadow-lg hover:opacity-90 transition-all flex items-center justify-between`}
+        >
+          <div className="flex items-center gap-3">
+            <Icon size={24} />
+            <span className="font-bold text-lg">{concept.title}</span>
+          </div>
+          {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+        </button>
+        
+        {isExpanded && (
+          <div className="mt-3 ml-6 space-y-3">
+            {concept.children.map((child, idx) => (
+              <div key={idx} className="bg-white rounded-lg p-4 shadow border-l-4 border-gray-300 hover:border-blue-400 transition-all">
+                <h3 className="font-semibold text-gray-800 mb-1">{child.title}</h3>
+                <p className="text-sm text-gray-600 mb-2">{child.desc}</p>
+                {child.sub && (
+                  <ul className="text-xs text-gray-500 space-y-1 ml-4">
+                    {child.sub.map((item, i) => (
+                      <li key={i} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Oracle AI & ML Fundamentals</h1>
+          <p className="text-gray-600">Click on each section to explore concepts</p>
+        </div>
+        
+        <div className="space-y-4">
+          {concepts.map(concept => (
+            <ConceptNode key={concept.id} concept={concept} />
+          ))}
+        </div>
+
+        <div className="mt-8 bg-white rounded-lg p-6 shadow">
+          <h2 className="font-bold text-lg mb-3 text-gray-800">Key Relationships</h2>
+          <div className="space-y-2 text-sm text-gray-700">
+            <p>â†’ <strong>Generative AI</strong> builds on deep learning architectures like transformers</p>
+            <p>â†’ <strong>Oracle 23ai</strong> integrates vector databases with traditional SQL for AI workloads</p>
+            <p>â†’ <strong>OCI ML Services</strong> provides the training infrastructure for custom models</p>
+            <p>â†’ <strong>Select AI</strong> uses LLMs to make databases conversationally accessible</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ConceptMap;
